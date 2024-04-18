@@ -1,0 +1,67 @@
+﻿@import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+
+$font-default: "Inter", sans-serif;
+$font-mono: "Inter", monospace;
+$font-bold: 500;
+$font-regular: 400;
+
+body {
+  line-height: 1.2;
+  font-family: $font-default;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: $font-bold;
+  line-height: normal;
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: $font-bold;
+  @media screen and (max-width: $breakpoint-sm) {
+    font-size: 20px;
+  }
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: $font-bold;
+  @media screen and (max-width: $breakpoint-sm) {
+    font-size: 16px;
+  }
+}
+
+p {
+  font-size: 16px;
+  font-weight: $font-bold;
+  @media screen and (max-width: $breakpoint-sm) {
+    font-size: 14px;
+  }
+}
+
+.mono {
+  font-family: $font-mono;
+  font-weight: $font-bold;
+  word-spacing: 0.2em;
+  letter-spacing: 1px;
+}
+
+.font {
+  &__weight {
+    &--regular {
+      font-weight: $font-regular !important;
+    }
+    &--bold {
+      font-weight: $font-bold !important;
+    }
+  }
+  &__style {
+    &--regular {
+      font-style: normal;
+    }
+    &--italic {
+      font-style: italic;
+    }
+  }
+}
