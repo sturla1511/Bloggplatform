@@ -2,13 +2,6 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
-  apollo: {
-    clients: {
-      default: {
-        httpEndpoint: "/api/graphql",
-      },
-    },
-  },
   css: ["~/assets/css/main.scss"],
   vite: {
     css: {
@@ -22,6 +15,14 @@ export default defineNuxtConfig({
       fs: {
         strict: false,
       },
+    },
+  },
+  runtimeConfig: {
+    private: {
+      cosmosEndpoint: '',
+      cosmosKey: '',
+      cosmosDatabaseId: '',
+      cosmosContainerId: ''
     },
   },
 });
