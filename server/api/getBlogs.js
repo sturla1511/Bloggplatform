@@ -11,13 +11,9 @@ export default defineEventHandler(async (event) => {
     const database = client.database(config.private.cosmosDatabaseId);
     const container = database.container(config.private.cosmosContainerId);
 
-    const querySpec = {
-        query: "SELECT * FROM c"
-    };
-
     try {
-        const { resources: items } = await container.items.query("SELECT * FROM c").fetchAll();
-        return items;
+        const { resources: blogs } = await container.items.query("SELECT * FROM c").fetchAll();
+        return blogs;
     } catch (error) {
         console.error('Error querying Cosmos DB:', error);
         event.res.statusCode = 500;

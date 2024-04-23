@@ -4,7 +4,7 @@ import { ref } from 'vue';
 const blogs = ref([]);
 
 try {
-  const response = await fetch('/api/getItems' );
+  const response = await fetch('/api/getBlogs' );
   if (!response.ok) {
     throw new Error('Failed to fetch');
   }
@@ -12,7 +12,6 @@ try {
 } catch (error) {
   console.error('Error fetching data:', error);
 }
-
 
 async function updateLikes(blogId, event) {
   try {
@@ -32,9 +31,6 @@ async function updateLikes(blogId, event) {
   } catch (error) {
     console.error('Error updating likes:', error);
   }
-}
-function updateLike() {
-  
 }
 </script>
 
