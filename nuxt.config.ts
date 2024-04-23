@@ -24,4 +24,18 @@ export default defineNuxtConfig({
       },
     },
   },
+  runtimeConfig: {
+    public: {
+      cosmosDatabaseId: '',
+      cosmosContainerId: ''
+    },
+    cosmosEndpoint: '',
+    cosmosKey: '',
+    private: {
+      cosmosEndpoint: '',
+      cosmosKey: '',
+      cosmosDatabaseId: '',
+      cosmosContainerId: ''
+    },
+  },
 });
