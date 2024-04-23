@@ -22,6 +22,7 @@ onMounted(fetchItem);
 <template>
   <div v-if="blog">
     <h1 v-if="blog?.heading">{{ blog.heading }}</h1>
+    <img v-if="blog?.image" :src="blog.image" alt="image">
     <div v-if="blog?.text" v-html="blog.text"></div>
   </div>
 </template>
