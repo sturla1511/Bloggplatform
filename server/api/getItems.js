@@ -17,7 +17,6 @@ export default defineEventHandler(async (event) => {
 
     try {
         const { resources: items } = await container.items.query("SELECT * FROM c").fetchAll();
-        console.log(items)
         return items;
     } catch (error) {
         console.error('Error querying Cosmos DB:', error);
