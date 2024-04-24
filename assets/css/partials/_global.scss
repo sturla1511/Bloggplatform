@@ -10,3 +10,9 @@
 html {
   scroll-behavior: smooth;
 }
+
+.sr-only {
+  display: flex;
+  width: 0;
+  visibility: hidden;
+}

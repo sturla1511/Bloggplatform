@@ -22,7 +22,7 @@ onMounted(fetchItem);
 <template>
   <div v-if="blog" class="blog-container">
     <div class="heading">
-      <time v-if="blog?.publishedDate">{{ blog?.publishedDate }}</time>
+      <time v-if="blog?.publishedDate"><span class="sr-only">published </span>{{ blog?.publishedDate }}</time>
       <h1 v-if="blog?.heading">{{ blog.heading }}</h1>
     </div>
     <div class="banner">
@@ -31,7 +31,7 @@ onMounted(fetchItem);
           {{ tag }}
         </li>
       </ul>
-      <img v-if="blog?.image" :src="blog.image" alt="image">
+      <img v-if="blog?.image" :src="blog.image" :alt="blog?.imageAltText">
     </div>
     <div class="text" v-if="blog?.text" v-html="blog.text" />
   </div>
