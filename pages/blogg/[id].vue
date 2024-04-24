@@ -74,8 +74,6 @@ onMounted(fetchItem);
      img {
        display: flex;
        width: 100%;
-       //margin-right: 36px;
-
        filter: drop-shadow(-2px 4px 4px rgba(0, 0, 0, 0.25));
      }
    }
