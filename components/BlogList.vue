@@ -5,6 +5,7 @@ import { tags } from "~/assets/utils/tags.ts";
 
 const blogs = ref([]);
 let selectedTags = ref([]);
+let sortBy = ref('newest')
 
 async function getBlogs() {
   try {
@@ -17,11 +18,17 @@ async function getBlogs() {
     
     const filteredBlogs = allBlogs.filter(blog => selectedTags?.value?.every(tag => blog?.tags?.includes(tag)));
     
-    blogs.value = filteredBlogs.sort((a, b) => {
-      const dateA = parseDate(a.publishedDate);
-      const dateB = parseDate(b.publishedDate);
-      return dateB - dateA;
-    });
+    if (sortBy.value === 'newest') {
+      blogs.value = filteredBlogs.sort((a, b) => {
+        const dateA = parseDate(a.publishedDate);
+        const dateB = parseDate(b.publishedDate);
+        return dateB - dateA;
+      });
+    } else if (sortBy.value === 'popular') {
+      blogs.value = filteredBlogs.sort((a, b) => {
+        return b?.likes - a?.likes;
+      });
+    }
   } catch (error) {
     console.error('Error fetching data:', error);
   }
