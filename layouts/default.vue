@@ -16,6 +16,7 @@ main {
 .page-content-container {
   background-color: white;
   max-width: $max-width;
+  width: 100%;
   border-radius: 8px;
   margin: 40px 0;
 }

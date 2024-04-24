@@ -1,5 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import { tagColor } from "~/assets/utils/tags.ts";
+
 const route = useRoute()
 
 const blog = ref(null);
@@ -27,7 +29,11 @@ onMounted(fetchItem);
     </div>
     <div class="banner">
       <ul v-if="blog?.tags">
-        <li v-for="(tag, index) in blog?.tags" :key="index"> 
+        <li 
+          v-for="(tag, index) in blog?.tags"
+          :style="'background-color: ' + tagColor(tag) + ';'"
+          :key="index"
+        > 
           {{ tag }}
         </li>
       </ul>
@@ -59,13 +65,15 @@ onMounted(fetchItem);
      position: relative;
      ul {
        position: absolute;
+       display: flex;
+       gap: 8px;
+       flex-flow: column;
        list-style-type: none;
        margin: 0;
        padding: 12px 0;
        z-index: 2;
        li {
          font-size: 14px;
-         background-color: #9EEB3C;
          padding: 4px 6px 4px 6px;
          border-radius: 1px 5px 5px 1px;
          filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
