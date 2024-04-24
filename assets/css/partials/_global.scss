@@ -1,5 +1,6 @@
 ﻿body {
   margin: 0;
+  background-color: $background-color;
 }
 
 .flex {
@@ -8,4 +9,10 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+.sr-only {
+  display: flex;
+  width: 0;
+  visibility: hidden;
 }

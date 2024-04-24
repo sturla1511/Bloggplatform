@@ -38,8 +38,8 @@ async function updateLikes(blogId, event) {
   <div>
     <div v-if="blogs.length">
       <div v-for="blog in blogs" :key="blog.id">
-        <h1>{{ blog.heading }}</h1>
-        <div>{{ blog.likes }}</div>
+        <h1 v-if="blog?.heading">{{ blog.heading }}</h1>
+        <div v-if="blog?.likes">{{ blog.likes }}</div>
         <input type="checkbox" name="like" @input="event => updateLikes(blog.id, event)">
       </div>
     </div>
