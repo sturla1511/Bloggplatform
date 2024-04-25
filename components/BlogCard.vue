@@ -1,6 +1,9 @@
 <script setup>
 import { ref } from 'vue';
 import { tagColor } from "~/assets/utils/tags.ts";
+import { usePreferenceStore } from "~/stores/Preferences.ts";
+
+const preference = usePreferenceStore();
 
 const props = defineProps({
   heading: String,
@@ -15,6 +18,9 @@ const props = defineProps({
 });
 
 let user = ref('')
+let blogLikes = ref(props.likes)
+let isBlogLikedByUser = ref(preference.likedBlogs.includes(props.id))
+
 if (props.userId) {
   try {
     const response = await fetch(`/api/user/${props.userId}`);
@@ -30,9 +36,12 @@ async function updateLikes(blogId, event) {
     const response = await fetch(`/api/blog/like/${blogId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: event.target.checked ? 'increment' : 'de crement' })
+      body: JSON.stringify({ action: event.target.checked ? 'increment' : 'decrement' })
     });
     if (!response.ok) throw new Error('Failed to update likes');
+    isBlogLikedByUser.value = event.target.checked
+    preference.likeBlog(props.id)
+    blogLikes.value = event.target.checked ? blogLikes.value+1 : blogLikes.value-1
   } catch (error) {
     console.error('Error updating likes:', error);
   }
@@ -40,8 +49,8 @@ async function updateLikes(blogId, event) {
 </script>
 
 <template>
-  <nuxt-link class="blog-card" :to="'blogg/' + id">
-    <article>
+  <article>
+    <nuxt-link class="blog-card" :to="'blogg/' + id">
       <div class="banner">
         <ul v-if="tags" :style="image ? 'position: absolute;' : ''">
           <li 
@@ -64,13 +73,15 @@ async function updateLikes(blogId, event) {
           {{ user.name }}
         </span>
       </div>
-      <!--div class="like-section">
-        <input type="checkbox" name="like" id="like-{{ id }}" @input="event => updateLikes(id, event)">
-        <label for="like-{{ id }}">{{ likes }} <i class="fas fa-heart"></i></label>
-      </div>-->
       <span class="sr-only">Les mer om {{ heading }}</span>
-    </article>
-  </nuxt-link>
+    </nuxt-link>
+    <label class="like-section" :for="'like-'+id">
+      <Heart class="heart" :fill="isBlogLikedByUser" />
+      <input class="sr-only" type="checkbox" name="like" :id="'like-'+id" :checked="isBlogLikedByUser" @input="event => updateLikes(id, event)">
+      {{ blogLikes }}
+      <span class="sr-only">likes</span>
+    </label>
+  </article>
 </template>
 
 <style scoped lang="scss">
@@ -82,15 +93,10 @@ async function updateLikes(blogId, event) {
   border-radius: 5px;
   width: 100%;
   max-width: 600px;
-  height: calc(100% - 18px);
+  height: calc(100% - 18px - 33px);
   text-decoration: none;
   color: black;
   filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
-  article {
-    height: 100%;
-    display: flex;
-    flex-flow: column;
-  }
   .banner {
     width: 100%;
     position: relative;
@@ -143,8 +149,13 @@ async function updateLikes(blogId, event) {
     margin: auto 10px 0;
     flex-flow: row-reverse;
     span {
-      margin-right: auto;
+      margin-right: 12px;
       font-style: italic;
+      order: 2;
+    }
+    time {
+      margin-right: auto;
+      order: 1;
     }
   }
   &:hover {
@@ -164,6 +175,28 @@ async function updateLikes(blogId, event) {
         border-radius: 5px 1px 1px 5px;
         filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.4));
       }
+    }
+  }
+}
+.like-section {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  margin-top: 8px;
+  margin-left: auto;
+  cursor: pointer;
+  .heart {
+    height: 21px;
+    width: 21px;
+    margin: 2px;
+  }
+  &:hover {
+    .heart {
+      height: 25px;
+      width: 25px;
+      margin: 0;
     }
   }
 }
