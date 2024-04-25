@@ -1,15 +1,13 @@
 <script setup>
 import { ref } from 'vue';
 import BlogCard from "~/components/BlogCard.vue";
-import { tags } from "~/assets/utils/tags.ts";
 import { usePreferenceStore } from "~/stores/Preferences.ts";
-import { tagColor } from "~/assets/utils/tags.ts";
 
 const preference = usePreferenceStore();
 
 const blogs = ref([]);
-let selectedTags = ref(preference.getTags() ?? []);
 let sortBy = ref('relevant')
+console.log(preference?.tagPreferences)
 
 async function getBlogs() {
   try {
@@ -89,38 +87,11 @@ function parseDate(dateString) {
   const [day, month, year] = dateString?.split('.')?.map(part => parseInt(part, 10));
   return new Date(year, month - 1, day);
 }
-
-function selectTag(selected) {
-  preference.addOrRemoveTag(selected);
-  preference.getTags(selected);
-  getBlogs()
-}
 </script>
 
 <template>
   <div class="blog-list-container">
-    <div v-if="preference.isUserNew()">
-      <h1>Velg intereser</h1>
-      <ul class="tags">
-        <li
-            v-for="tag in tags"
-            class="tag"
-            :key="tag"
-        >
-          <label :style="'background-color: ' + tagColor(tag) + ';'">
-            {{ tag }}
-            <input
-                type="checkbox"
-                :class="selectedTags?.includes(tag) ? 'tag-selected' : ''"
-                :checked="selectedTags?.includes(tag)"
-                @click="selectTag(tag)"
-            >
-          </label>
-        </li>
-      </ul>
-      <button class="save-interests" @click="preference.setUser()">Lagre interese</button>
-    </div>
-    <ul v-if="blogs.length && !preference.isUserNew()" class="blog-list">
+    <ul v-if="blogs.length" class="blog-list">
       <li v-for="blog in blogs" :key="blog?.id">
         <BlogCard
           :heading="blog?.heading"
@@ -133,63 +104,22 @@ function selectTag(selected) {
           :userId="blog?.userId"
           :tags="blog?.tags"
         />
-        {{ blog.interestScore }}
       </li>
     </ul>
-    <p v-else-if="!preference.isUserNew()">No data found.</p>
+    <p v-else-if="!preference.isUserNew">No data found.</p>
   </div>
 </template>
 
 <style scoped lang="scss">
 .blog-list-container {
   padding: 10px;
-  ul {
+  .blog-list {
     list-style-type: none;
     margin: 0;
     padding: 0;
-  }
-  .tags {
-    display: flex;
-    flex-flow: wrap;
-    gap: 8px;
-    .tag {
-      display: flex;
-      font-size: 14px;
-      height: fit-content;
-      label {
-        display: flex;
-        padding: 4px 6px;
-        border-radius: 5px;
-        filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.25));
-      }
-      .tag-selected {
-        background-color: gray;
-      }
-    }
-  }
-  .save-interests {
-    padding: 8px;
-    border: none;
-    border-radius: 5px;
-    margin-top: 12px;
-    font-size: 16px;
-    background-color: $background-color;
-    cursor: pointer;
-    filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.25));
-    &:hover {
-      background-color: darken($background-color, 5%);
-    }
-    &:active {
-      filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
-    }
-  }
-  .blog-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
-    li {
-    
-    }
   }
 }
 @media (min-width: $breakpoint-sm) {

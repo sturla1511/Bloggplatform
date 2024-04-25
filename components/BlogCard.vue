@@ -75,12 +75,14 @@ async function updateLikes(blogId, event) {
       </div>
       <span class="sr-only">Les mer om {{ heading }}</span>
     </nuxt-link>
-    <label class="like-section" :for="'like-'+id">
-      <Heart class="heart" :fill="isBlogLikedByUser" />
-      <input class="sr-only" type="checkbox" name="like" :id="'like-'+id" :checked="isBlogLikedByUser" @input="event => updateLikes(id, event)">
-      {{ blogLikes }}
-      <span class="sr-only">likes</span>
-    </label>
+    <fieldset>
+      <legend class="sr-only">like:</legend>
+      <label class="like-section" :for="'like-'+id">
+        <Heart class="heart" :fill="isBlogLikedByUser" />
+        <input class="sr-only" type="checkbox" name="like" :id="'like-'+id" :checked="isBlogLikedByUser" @input="event => updateLikes(id, event)">
+        {{ blogLikes }}
+      </label>
+    </fieldset>
   </article>
 </template>
 
@@ -178,25 +180,33 @@ async function updateLikes(blogId, event) {
     }
   }
 }
-.like-section {
-  display: flex;
-  width: fit-content;
-  align-items: center;
-  gap: 4px;
-  text-align: center;
-  margin-top: 8px;
-  margin-left: auto;
-  cursor: pointer;
-  .heart {
-    height: 21px;
-    width: 21px;
-    margin: 2px;
-  }
-  &:hover {
+fieldset {
+  border: none;
+  appearance: none;
+  padding: 0;
+  .like-section {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+    margin-top: 8px;
+    margin-left: auto;
+    cursor: pointer;
+    &:focus-within {
+      outline: -webkit-focus-ring-color auto 1px;
+    }
     .heart {
-      height: 25px;
-      width: 25px;
-      margin: 0;
+      height: 21px;
+      width: 21px;
+      margin: 2px;
+    }
+    &:hover {
+      .heart {
+        height: 25px;
+        width: 25px;
+        margin: 0;
+      }
     }
   }
 }

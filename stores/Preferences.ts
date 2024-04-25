@@ -3,18 +3,15 @@ import { defineStore } from "pinia";
 interface State {
 	tagPreferences: Array<string>;
 	likedBlogs: Array<string>;
-	newUser: boolean;
+	isUserNew: boolean;
 }
 
 // @ts-ignore
 export const usePreferenceStore = defineStore("Preferences", {
-	state: (): State => ({ tagPreferences: [], likedBlogs: [], newUser: true }),
+	state: (): State => ({ tagPreferences: [], likedBlogs: [], isUserNew: true }),
 	actions: {
 		setUser() {
-			this.newUser = false
-		},
-		isUserNew() {
-			return this.newUser
+			this.isUserNew = false
 		},
 		getTags(tag: string): Promise<Array<string>> {
 			return this.tagPreferences
