@@ -7,7 +7,6 @@ const preference = usePreferenceStore();
 
 const blogs = ref([]);
 let sortBy = ref('relevant')
-console.log(preference?.tagPreferences)
 
 async function getBlogs() {
   try {
