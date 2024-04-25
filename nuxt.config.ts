@@ -17,6 +17,19 @@ export default defineNuxtConfig({
       },
     },
   },
+  modules: [
+    '@pinia/nuxt',
+    '@pinia-plugin-persistedstate/nuxt',
+  ],
+  pinia: {
+    autoImports: ["defineStore", ["defineStore", "definePiniaStore"]],
+  },
+  piniaPersistedstate: {
+    cookieOptions: {
+      sameSite: 'strict',
+    },
+    storage: 'localStorage'
+  },
   runtimeConfig: {
     private: {
       cosmosEndpoint: '',

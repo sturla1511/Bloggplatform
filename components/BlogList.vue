@@ -1,11 +1,12 @@
 <script setup>
 import { ref } from 'vue';
 import BlogCard from "~/components/BlogCard.vue";
-import { tags } from "~/assets/utils/tags.ts";
+import { usePreferenceStore } from "~/stores/Preferences.ts";
+
+const preference = usePreferenceStore();
 
 const blogs = ref([]);
-let selectedTags = ref([]);
-let sortBy = ref('newest')
+let sortBy = ref('relevant')
 
 async function getBlogs() {
   try {
@@ -14,18 +15,64 @@ async function getBlogs() {
       throw new Error('Failed to fetch');
     }
     const allBlogs = await response.json();
-    blogs.value = allBlogs.filter(blog => selectedTags?.value?.every(tag => blog?.tags?.includes(tag)));
-    
-    const filteredBlogs = allBlogs.filter(blog => selectedTags?.value?.every(tag => blog?.tags?.includes(tag)));
-    
-    if (sortBy.value === 'newest') {
-      blogs.value = filteredBlogs.sort((a, b) => {
+
+    const likedBlogs = allBlogs.filter(blog => preference.likedBlogs.includes(blog.id));
+    const likedPublishers = likedBlogs.flatMap(blog => blog.userId);
+    const likedTags = likedBlogs.flatMap(blog => blog.tags);
+
+    if (sortBy.value === 'relevant') {
+      let blogsWithInterestScore = allBlogs.map(blog => {
+        let interestScore = 0;
+
+        likedPublishers.forEach(liked => {
+          if (liked === blog.userId) {
+            interestScore += 3;
+          }
+        });
+        blog.tags.forEach(tag => {
+          preference?.tagPreferences?.forEach(preference => {
+            if (preference === tag) {
+              interestScore += 9 / blog?.tags?.length;
+            }
+          });
+          likedTags.forEach(liked => {
+            if (liked === tag) {
+              interestScore += 2;
+            }
+          });
+        });
+        return { ...blog, interestScore };
+      });
+      
+      let sortedByInterest = blogsWithInterestScore.sort((a, b) => {
+        if (b.interestScore === a.interestScore) {
+          return b.likes - a.likes
+        } else {
+          return b.interestScore - a.interestScore
+        }
+      });
+      
+      let sortedByLikes = [...allBlogs].sort((a, b) => b.likes - a.likes);
+      
+      let interestRankMap = new Map(sortedByInterest.map((blog, index) => [blog.id, index]));
+      let likesRankMap = new Map(sortedByLikes.map((blog, index) => [blog.id, index]));
+      
+      let blogsRanked = allBlogs.map(blog => {
+        let interestRank = interestRankMap.get(blog.id);
+        let likesRank = likesRankMap.get(blog.id);
+        let averageRank = (interestRank + likesRank) / 2;
+        return { ...blog, averageRank };
+      });
+      
+      blogs.value  = blogsRanked.sort((a, b) => a.averageRank - b.averageRank);
+    } else if (sortBy.value === 'newest') {
+      blogs.value = allBlogs.sort((a, b) => {
         const dateA = parseDate(a.publishedDate);
         const dateB = parseDate(b.publishedDate);
         return dateB - dateA;
       });
     } else if (sortBy.value === 'popular') {
-      blogs.value = filteredBlogs.sort((a, b) => {
+      blogs.value = allBlogs.sort((a, b) => {
         return b?.likes - a?.likes;
       });
     }
@@ -39,35 +86,10 @@ function parseDate(dateString) {
   const [day, month, year] = dateString?.split('.')?.map(part => parseInt(part, 10));
   return new Date(year, month - 1, day);
 }
-
-function selectTag(selected) {
-  if (selectedTags?.value?.includes(selected)) {
-    const index = selectedTags?.value.findIndex((tag) => selected === tag)
-    selectedTags?.value?.splice(index, 1)
-  } else {
-    selectedTags?.value?.push(selected)
-  }
-  getBlogs()
-}
 </script>
 
 <template>
   <div class="blog-list-container">
-    <ul class="tags">
-      <li 
-        v-for="tag in tags"
-        class="tag" 
-        :key="tag"
-      >
-        <button
-          :class="selectedTags?.includes(tag) ? 'tag-selected' : ''"
-          :aria-checked="selectedTags?.includes(tag)" 
-          @click="selectTag(tag)"
-        >
-          {{ tag }}
-        </button>
-      </li>
-    </ul>
     <ul v-if="blogs.length" class="blog-list">
       <li v-for="blog in blogs" :key="blog?.id">
         <BlogCard
@@ -83,33 +105,20 @@ function selectTag(selected) {
         />
       </li>
     </ul>
-    <p v-else>No data found.</p>
+    <p v-else-if="!preference.isUserNew">No data found.</p>
   </div>
 </template>
 
 <style scoped lang="scss">
 .blog-list-container {
   padding: 10px;
-  ul {
+  .blog-list {
     list-style-type: none;
     margin: 0;
     padding: 0;
-  }
-  .tags {
-    .tag {
-      font-size: 14px;
-      .tag-selected {
-        background-color: gray;
-      }
-    }
-  }
-  .blog-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
-    li {
-    
-    }
   }
 }
 @media (min-width: $breakpoint-sm) {
