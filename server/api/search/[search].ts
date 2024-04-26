@@ -14,8 +14,6 @@ export default defineEventHandler(async (event) => {
     const rawSearchTerm = decodeURIComponent(event.context.params.search || '');
     const searchTerms = rawSearchTerm.split(' ').filter(term => term.trim().length > 0);
 
-    console.log(`Searching for terms: ${searchTerms.join(', ')}`);
-
     if (searchTerms.length === 0) {
         console.log('No valid search terms provided.');
         event.res.statusCode = 400;
