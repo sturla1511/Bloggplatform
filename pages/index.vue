@@ -16,7 +16,21 @@ const preference = usePreferenceStore();
 .front-page {
   width: 100%;
   h1 {
-    margin: 36px 36px 0;
+    margin: 20px 10px 10px;
+  }
+}
+@media (min-width: $breakpoint-sm) {
+  .front-page {
+    h1 {
+      margin: 26px 16px 10px;
+    }
+  }
+}
+@media (min-width: $breakpoint-md) {
+  .front-page {
+    h1 {
+      margin: 36px 36px 20px;
+    }
   }
 }
 </style>
