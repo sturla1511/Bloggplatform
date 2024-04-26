@@ -6,7 +6,7 @@ const preference = usePreferenceStore();
 
 <template>
   <div class="front-page">
-    <h1>Bloggplatform!</h1>
+    <h1 v-if="!preference.isUserNew">Bloggplatform!</h1>
     <SelectInterests v-if="preference.isUserNew" />
     <BlogList v-if="!preference.isUserNew" />
   </div>
