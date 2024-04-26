@@ -82,6 +82,25 @@ async function getBlogs() {
 }
 getBlogs()
 
+async function searchBlogs(query) {
+  if (query?.target?.value?.trim().length > 0) {
+    try {
+      const response = await fetch(`/api/search/${encodeURIComponent(query?.target?.value)}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch');
+      }
+      const allBlogs = await response.json();
+
+      blogs.value = allBlogs
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  } else {
+    getBlogs()
+  }
+}
+
 function parseDate(dateString) {
   const [day, month, year] = dateString?.split('.')?.map(part => parseInt(part, 10));
   return new Date(year, month - 1, day);
@@ -90,6 +109,7 @@ function parseDate(dateString) {
 
 <template>
   <div class="blog-list-container">
+    <input type="search" @input="searchBlogs">
     <ul v-if="blogs.length" class="blog-list">
       <li v-for="blog in blogs" :key="blog?.id">
         <BlogCard
