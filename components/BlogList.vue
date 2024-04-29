@@ -279,10 +279,9 @@ function toggleTagFilter() {
         list-style-type: none;
         margin: 0;
         padding: 6px 6px 10px 6px;
-        gap: 4px;
+        gap: 6px;
         background-color: $background-color;
         border-radius: 0 0 5px 5px;
-        justify-content: space-between;
         li {
           display: flex;
         }
