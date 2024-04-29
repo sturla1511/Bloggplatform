@@ -194,7 +194,12 @@ function toggleTagFilter() {
         <label class="relevant" :class="{'sort-type-selected': sortBy === 'relevant'}" for="relevant">For deg</label>
       </fieldset>
     </div>
-    <div v-if="loading" class="loading">laster...</div>
+    <div v-if="loading" class="sr-only">Laster...</div>
+    <ol v-if="loading" class="blog-list" :aria-hidden="true">
+      <li v-for="n in 3" :key="n">
+        <BlogCardLoading />
+      </li>
+    </ol>
     <ol v-else-if="blogs.length" class="blog-list">
       <li v-for="blog in blogs" :key="blog?.id">
         <BlogCard
