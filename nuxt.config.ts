@@ -1,8 +1,22 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
 export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
   css: ["~/assets/css/main.scss"],
+  app: {
+    head: {
+      title: 'Bloggplatform',
+      chartset: 'utf-8',
+      viewport: 'width=device-width, initial-scale=1',
+      htmlAttrs: {
+        lang: 'nb'
+      },
+      meta: [
+        { name: 'description', content: 'En bloggplatform for håndverk' }
+      ]
+    }
+  },
   vite: {
     css: {
       preprocessorOptions: {
@@ -13,9 +27,12 @@ export default defineNuxtConfig({
     },
     server: {
       fs: {
-        strict: false,
+        strict: false
       },
     },
+  },
+  render: {
+    compressor: true
   },
   modules: [
     '@pinia/nuxt',

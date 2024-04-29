@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { tagColor } from "~/assets/utils/tags.ts";
 import { usePreferenceStore } from "~/stores/Preferences.ts";
 
@@ -17,19 +17,26 @@ const props = defineProps({
   tags: Array
 });
 
-let user = ref('')
-let blogLikes = ref(props.likes)
-let isBlogLikedByUser = ref(preference.likedBlogs.includes(props.id))
+let user = ref(null);
+let blogLikes = ref(props.likes);
+let isBlogLikedByUser = ref(preference.likedBlogs.includes(props.id));
 
-if (props.userId) {
-  try {
-    const response = await fetch(`/api/user/${props.userId}`);
-    if (!response.ok) throw new Error('Failed to fetch user');
-    user.value = await response.json();
-  } catch (error) {
-    console.error('Error fetching user:', error);
-  }
+function fetchUser() {
+  if (!props.userId) return;
+  fetch(`/api/user/${props.userId}`)
+      .then(response => {
+        if (!response.ok) throw new Error('Failed to fetch user');
+        return response.json();
+      })
+      .then(userData => {
+        user.value = userData;
+      })
+      .catch(error => {
+        console.error('Error fetching user:', error);
+      });
 }
+
+onMounted(fetchUser);
 
 async function updateLikes(blogId, event) {
   try {
@@ -39,9 +46,9 @@ async function updateLikes(blogId, event) {
       body: JSON.stringify({ action: event.target.checked ? 'increment' : 'decrement' })
     });
     if (!response.ok) throw new Error('Failed to update likes');
-    isBlogLikedByUser.value = event.target.checked
-    preference.likeBlog(props.id)
-    blogLikes.value = event.target.checked ? blogLikes.value+1 : blogLikes.value-1
+    isBlogLikedByUser.value = event.target.checked;
+    preference.likeBlog(props.id);
+    blogLikes.value = event.target.checked ? blogLikes.value + 1 : blogLikes.value - 1;
   } catch (error) {
     console.error('Error updating likes:', error);
   }
@@ -61,9 +68,9 @@ async function updateLikes(blogId, event) {
             {{ tag }}
           </li>
         </ul>
-        <img v-if="image" :src="image" :alt="imageAltText">
+        <img v-if="image" height="150" :src="image.replace('jpeg', 'WebP')" :alt="imageAltText">
       </div>
-      <h3 v-if="heading">{{ heading }}</h3>
+      <h2 v-if="heading">{{ heading }}</h2>
       <p v-if="text" class="text" v-html="text" />
       <div class="blog-card-footer">
         <time v-if="publishedDate" :datetime="publishedDate" :aria-label="'Publisert ' + publishedDate">
@@ -120,6 +127,9 @@ async function updateLikes(blogId, event) {
         filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.2));
       }
     }
+    .image-placeholder {
+      height: 150px;
+    }
     img {
       object-fit: cover;
       height: 150px;
@@ -130,13 +140,14 @@ async function updateLikes(blogId, event) {
       filter: drop-shadow(-2px 4px 4px rgba(0, 0, 0, 0.25));
     }
   }
-  h3 {
+  h2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     margin: 0 10px;
     font-weight: 600;
+    font-size: 18px;
   }
   .text {
     display: -webkit-box;

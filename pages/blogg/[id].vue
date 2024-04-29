@@ -1,10 +1,10 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { tagColor } from "~/assets/utils/tags.ts";
 
 const route = useRoute()
 
-const blog = ref(null);
+let blog = ref({});
 async function fetchItem() {
   try {
     const response = await fetch(`/api/blog/${route.params.id}`);
@@ -19,6 +19,16 @@ async function fetchItem() {
 }
 
 onMounted(fetchItem);
+
+
+watch(blog, (newVal, oldVal) => {
+  useHead({
+    meta: [
+      { name: 'title', content: `${newVal?.heading}` },
+      { name: 'description', content: `${newVal?.heading}` }
+    ]
+  });
+});
 </script>
 
 <template>
@@ -37,7 +47,7 @@ onMounted(fetchItem);
           {{ tag }}
         </li>
       </ul>
-      <img v-if="blog?.image" :src="blog.image" :alt="blog?.imageAltText">
+      <img v-if="blog?.image" height="450" :src="blog.image" :alt="blog?.imageAltText">
     </div>
     <div class="text" v-if="blog?.text" v-html="blog.text" />
   </div>
@@ -83,6 +93,7 @@ onMounted(fetchItem);
        display: flex;
        width: 100%;
        filter: drop-shadow(-2px 4px 4px rgba(0, 0, 0, 0.25));
+       object-fit: cover;
      }
    }
    .text {

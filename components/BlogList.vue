@@ -10,9 +10,11 @@ const blogs = ref([]);
 let sortBy = ref('relevant')
 let selectedTags = ref([])
 let tagFilterOpen = ref(false)
+let loading = ref(false)
 
 async function getBlogs() {
   try {
+    loading.value = true
     const response = await fetch('/api/getBlogs');
     if (!response.ok) {
       throw new Error('Failed to fetch');
@@ -82,7 +84,9 @@ async function getBlogs() {
     if (selectedTags?.value?.length > 0) {
       blogs.value = blogs.value.filter(blog => selectedTags?.value?.every(tag => blog?.tags?.includes(tag)))
     }
+    loading.value = false
   } catch (error) {
+    loading.value = false
     console.error('Error fetching data:', error);
   }
 }
@@ -129,7 +133,6 @@ function selectTag(selected) {
 
 function toggleTagFilter() {
   tagFilterOpen.value = !tagFilterOpen.value;
-  getBlogs()
 }
 </script>
 
@@ -191,7 +194,8 @@ function toggleTagFilter() {
         <label class="relevant" :class="{'sort-type-selected': sortBy === 'relevant'}" for="relevant">For deg</label>
       </fieldset>
     </div>
-    <ol v-if="blogs.length" class="blog-list">
+    <div v-if="loading" class="loading">laster...</div>
+    <ol v-else-if="blogs.length" class="blog-list">
       <li v-for="blog in blogs" :key="blog?.id">
         <BlogCard
           :heading="blog?.heading"
@@ -206,7 +210,7 @@ function toggleTagFilter() {
         />
       </li>
     </ol>
-    <p v-else-if="!preference.isUserNew">No data found.</p>
+    <p v-else-if="!preference.isUserNew">Fant ingen blogger</p>
   </div>
 </template>
 
@@ -337,8 +341,13 @@ function toggleTagFilter() {
       }
     }
   }
+  .loading {
+    display: flex;
+    width: 100%;
+  }
   .blog-list {
     list-style-type: none;
+    height: fit-content;
     margin: 0;
     padding: 0;
     display: grid;
