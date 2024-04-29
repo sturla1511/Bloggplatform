@@ -61,7 +61,8 @@ async function updateLikes(blogId, event) {
             {{ tag }}
           </li>
         </ul>
-        <img v-if="image" :src="image" :alt="imageAltText">
+        <img v-if="image" height="150" :src="image.replace('jpeg', 'WebP')" :alt="imageAltText">
+        <div v-else class="image-placeholder"></div>
       </div>
       <h3 v-if="heading">{{ heading }}</h3>
       <p v-if="text" class="text" v-html="text" />
@@ -119,6 +120,9 @@ async function updateLikes(blogId, event) {
         border-radius: 1px 5px 5px 1px;
         filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.2));
       }
+    }
+    .image-placeholder {
+      height: 150px;
     }
     img {
       object-fit: cover;

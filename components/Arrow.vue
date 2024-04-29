@@ -1,10 +1,5 @@
 <template>
-  <svg :class="{'arrow-down': arrowDown}" :aria-label="arrowDown ? 'Pil peker ned' : 'Pil peker opp'" width="800px" height="800px" viewBox="0 -4.5 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>arrow_up [#337]</title>
-    <desc>Created with Sketch.</desc>
-    <defs>
-
-    </defs>
+  <svg :class="{'arrow-down': arrowDown}" :aria-label="arrowDown ? 'Pil peker ned' : 'Pil peker opp'" width="800px" height="800px" viewBox="0 -4.5 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" >
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
       <g id="Dribbble-Light-Preview" transform="translate(-260.000000, -6684.000000)" fill="#000000">
         <g id="icons" transform="translate(56.000000, 160.000000)">

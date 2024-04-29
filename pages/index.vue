@@ -1,7 +1,7 @@
 <script setup>
 import BlogList from "~/components/BlogList.vue";
+import SelectInterests from "~/components/SelectInterests.vue";
 const preference = usePreferenceStore();
-
 </script>
 
 <template>
