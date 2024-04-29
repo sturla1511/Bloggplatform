@@ -161,6 +161,7 @@ async function updateLikes(blogId, event) {
          padding: 4px 6px 4px 6px;
          border-radius: 1px 5px 5px 1px;
          filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
+         width: fit-content;
        }
      }
      fieldset {
