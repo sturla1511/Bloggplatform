@@ -345,6 +345,9 @@ function toggleTagFilter() {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
+    li {
+      display: flex;
+    }
   }
 }
 @media (min-width: $breakpoint-sm) {
