@@ -118,9 +118,6 @@ async function updateLikes(blogId, event) {
         width: fit-content;
         border-radius: 1px 5px 5px 1px;
         filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.2));
-        &:after {
-          mix-blend-mode: difference;
-        }
       }
     }
     img {
