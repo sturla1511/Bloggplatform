@@ -83,7 +83,7 @@ async function updateLikes(blogId, event) {
           {{ tag }}
         </li>
       </ul>
-      <fieldset>
+      <fieldset v-if="blog.likes">
         <legend class="sr-only">like:</legend>
         <label class="like-section" :for="'like-'+blog?.id">
           <Heart class="heart" :fill="isBlogLikedByUser" />
@@ -92,7 +92,7 @@ async function updateLikes(blogId, event) {
         </label>
       </fieldset>
       <img v-if="blog?.image" height="450" :src="blog.image" :alt="blog?.imageAltText">
-      <div class="published-by"><span>publisert av: </span>{{ user?.name }}</div>
+      <div v-if="user?.name" class="published-by"><span>publisert av: </span>{{ user?.name }}</div>
     </div>
     <div class="text" v-if="blog?.text" v-html="blog.text" />
   </div>
