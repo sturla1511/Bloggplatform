@@ -17,6 +17,7 @@ main {
   background-color: white;
   max-width: $max-width;
   width: 100%;
+  min-height: calc(100vh - 80px);
   border-radius: 8px;
   margin: 40px 0;
 }

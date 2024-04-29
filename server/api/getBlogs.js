@@ -7,7 +7,6 @@ export default defineEventHandler(async (event) => {
         endpoint: config.private.cosmosEndpoint,
         key: config.private.cosmosKey,
     });
-    console.log(client)
 
     const database = client.database(config.private.cosmosDatabaseId);
     const container = database.container(config.private.cosmosContainerId);

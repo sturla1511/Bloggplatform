@@ -1,5 +1,4 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import {fa} from "cronstrue/dist/i18n/locales/fa";
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -28,9 +27,12 @@ export default defineNuxtConfig({
     },
     server: {
       fs: {
-        strict: false,
+        strict: false
       },
     },
+  },
+  render: {
+    compressor: true
   },
   modules: [
     '@pinia/nuxt',

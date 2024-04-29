@@ -133,7 +133,6 @@ function selectTag(selected) {
 
 function toggleTagFilter() {
   tagFilterOpen.value = !tagFilterOpen.value;
-  getBlogs()
 }
 </script>
 
@@ -195,7 +194,7 @@ function toggleTagFilter() {
         <label class="relevant" :class="{'sort-type-selected': sortBy === 'relevant'}" for="relevant">For deg</label>
       </fieldset>
     </div>
-    <div v-if="loading" class="loading">loading...</div>
+    <div v-if="loading" class="loading">laster...</div>
     <ol v-else-if="blogs.length" class="blog-list">
       <li v-for="blog in blogs" :key="blog?.id">
         <BlogCard
@@ -211,7 +210,7 @@ function toggleTagFilter() {
         />
       </li>
     </ol>
-    <p v-else-if="!preference.isUserNew">No data found.</p>
+    <p v-else-if="!preference.isUserNew">Fant ingen blogger</p>
   </div>
 </template>
 
@@ -345,11 +344,10 @@ function toggleTagFilter() {
   .loading {
     display: flex;
     width: 100%;
-    height: 100vh;
   }
   .blog-list {
     list-style-type: none;
-    height: calc(100vh - 80px);
+    height: fit-content;
     margin: 0;
     padding: 0;
     display: grid;
