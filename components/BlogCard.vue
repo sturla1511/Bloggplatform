@@ -150,13 +150,13 @@ async function updateLikes(blogId, event) {
     padding-top: 10px;
     margin: auto 10px 0;
     flex-flow: row-reverse;
+    justify-content: space-between;
     span {
       margin-right: 12px;
       font-style: italic;
       order: 2;
     }
     time {
-      margin-right: auto;
       order: 1;
     }
   }
