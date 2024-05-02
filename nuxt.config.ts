@@ -2,7 +2,7 @@
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  ssr: false,
+  ssr: true,
   css: ["~/assets/css/main.scss"],
   app: {
     head: {
